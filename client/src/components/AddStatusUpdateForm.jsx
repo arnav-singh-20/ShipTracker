@@ -22,14 +22,10 @@ const AddStatusUpdateForm = ({ onAdd }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="border-t border-slate-100 pt-4 mt-2 space-y-2">
-      {error && <p className="text-xs text-red-600">{error}</p>}
-      <div className="flex flex-col sm:flex-row gap-2">
-        <select
-          value={form.status}
-          onChange={(e) => setForm({ ...form, status: e.target.value })}
-          className="rounded-md border border-slate-300 px-2 py-1.5 text-sm bg-white"
-        >
+    <form onSubmit={handleSubmit} className="add-status-form">
+      {error && <p style={{ color: 'var(--red)', fontSize: '12.5px', marginBottom: '8px' }}>{error}</p>}
+      <div className="add-status-row">
+        <select value={form.status} onChange={(e) => setForm({ ...form, status: e.target.value })}>
           {STATUS_OPTIONS.map((s) => (
             <option key={s} value={s}>
               {s}
@@ -41,13 +37,8 @@ const AddStatusUpdateForm = ({ onAdd }) => {
           value={form.note}
           onChange={(e) => setForm({ ...form, note: e.target.value })}
           placeholder="Note (optional) — e.g. 'Cleared customs in Rotterdam'"
-          className="flex-1 rounded-md border border-slate-300 px-2 py-1.5 text-sm"
         />
-        <button
-          type="submit"
-          disabled={submitting}
-          className="text-sm bg-slate-900 text-white rounded-md px-4 py-1.5 font-medium disabled:opacity-50 whitespace-nowrap"
-        >
+        <button type="submit" disabled={submitting} className="btn-primary">
           {submitting ? 'Adding...' : 'Add update'}
         </button>
       </div>

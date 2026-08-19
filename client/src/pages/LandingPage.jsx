@@ -166,10 +166,10 @@ function LandingPage() {
                   <text className="wp-port" x="480" y="42" textAnchor="middle">PACIFIC — MID OCEAN</text>
                 </g>
                 <g>
-                  <circle ref={(el) => (wpRefs.current[2] = { ...wpRefs.current[2], pulse: el })} className="wp-pulse" cx="760" cy="26.75" />
-                  <circle ref={(el) => (wpRefs.current[2] = { ...wpRefs.current[2], dot: el })} className="wp-dot" cx="760" cy="26.75" />
-                  <text ref={(el) => (wpRefs.current[2] = { ...wpRefs.current[2], label: el })} className="wp-label" x="760" y="10" textAnchor="middle">CUSTOMS</text>
-                  <text className="wp-port" x="760" y="80" textAnchor="middle">LOS ANGELES, US</text>
+                  <circle ref={(el) => (wpRefs.current[2] = { ...wpRefs.current[2], pulse: el })} className="wp-pulse" cx="760" cy="27.5" />
+                  <circle ref={(el) => (wpRefs.current[2] = { ...wpRefs.current[2], dot: el })} className="wp-dot" cx="760" cy="27.5" />
+                  <text ref={(el) => (wpRefs.current[2] = { ...wpRefs.current[2], label: el })} className="wp-label" x="760" y="8" textAnchor="middle">CUSTOMS</text>
+                  <text className="wp-port" x="760" y="58" textAnchor="middle">LOS ANGELES, US</text>
                 </g>
                 <g>
                   <circle ref={(el) => (wpRefs.current[3] = { ...wpRefs.current[3], pulse: el })} className="wp-pulse" cx="1020" cy="60" />
@@ -178,13 +178,9 @@ function LandingPage() {
                   <text className="wp-port" x="998" y="34" textAnchor="end">CHICAGO, US</text>
                 </g>
 
-                <g
-                  ref={markerRef}
-                  className="marker-glow"
-                  transform="translate(1020, 60)"
-                  >
+                <g ref={markerRef} className="marker-glow">
                   <circle r="5" fill="#FF6A3D" />
-                  </g>
+                </g>
               </svg>
             </div>
           </div>

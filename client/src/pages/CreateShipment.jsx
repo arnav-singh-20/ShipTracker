@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { createShipment } from '../api/shipmentApi';
+import '../styles/app-theme.css';
 
 const CreateShipment = () => {
   const navigate = useNavigate();
@@ -36,27 +37,25 @@ const CreateShipment = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 p-6 sm:p-8">
-      <div className="max-w-lg mx-auto">
-        <Link to="/dashboard" className="text-sm text-slate-500 hover:text-slate-900 mb-4 inline-block">
+    <div className="app-shell">
+      <div className="app-wrap narrow">
+        <Link to="/dashboard" className="back-link">
           ← Back to dashboard
         </Link>
 
-        <div className="bg-white border border-slate-200 rounded-xl p-6">
-          <h1 className="text-xl font-semibold text-slate-900 mb-1">New shipment</h1>
-          <p className="text-sm text-slate-500 mb-6">
+        <div className="panel detail-card">
+          <h1 className="app-title" style={{ fontSize: '20px', marginBottom: '4px' }}>
+            New shipment
+          </h1>
+          <p className="app-sub" style={{ marginBottom: '24px' }}>
             A tracking ID will be generated automatically.
           </p>
 
-          {error && (
-            <div className="mb-4 text-sm text-red-700 bg-red-50 border border-red-200 rounded-md px-3 py-2">
-              {error}
-            </div>
-          )}
+          {error && <div className="alert-error">{error}</div>}
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Origin</label>
+          <form onSubmit={handleSubmit}>
+            <div className="form-field">
+              <label>Origin</label>
               <input
                 type="text"
                 name="origin"
@@ -64,12 +63,11 @@ const CreateShipment = () => {
                 value={form.origin}
                 onChange={handleChange}
                 placeholder="Shanghai, CN"
-                className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900"
               />
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Destination</label>
+            <div className="form-field">
+              <label>Destination</label>
               <input
                 type="text"
                 name="destination"
@@ -77,12 +75,11 @@ const CreateShipment = () => {
                 value={form.destination}
                 onChange={handleChange}
                 placeholder="Los Angeles, US"
-                className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900"
               />
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Carrier</label>
+            <div className="form-field">
+              <label>Carrier</label>
               <input
                 type="text"
                 name="carrier"
@@ -90,28 +87,22 @@ const CreateShipment = () => {
                 value={form.carrier}
                 onChange={handleChange}
                 placeholder="Maersk"
-                className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900"
               />
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">
-                Estimated delivery <span className="text-slate-400 font-normal">(optional)</span>
+            <div className="form-field">
+              <label>
+                Estimated delivery <span className="optional">(optional)</span>
               </label>
               <input
                 type="date"
                 name="estimatedDelivery"
                 value={form.estimatedDelivery}
                 onChange={handleChange}
-                className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900"
               />
             </div>
 
-            <button
-              type="submit"
-              disabled={submitting}
-              className="w-full bg-slate-900 text-white rounded-md py-2 text-sm font-medium hover:bg-slate-800 disabled:opacity-50 transition"
-            >
+            <button type="submit" disabled={submitting} className="btn-primary" style={{ width: '100%', justifyContent: 'center' }}>
               {submitting ? 'Creating...' : 'Create shipment'}
             </button>
           </form>

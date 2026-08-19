@@ -12,6 +12,7 @@ import {
 import StatusBadge from '../components/StatusBadge';
 import Timeline from '../components/Timeline';
 import AddStatusUpdateForm from '../components/AddStatusUpdateForm';
+import '../styles/app-theme.css';
 
 const ShipmentDetail = () => {
   const { id } = useParams();
@@ -97,15 +98,21 @@ const ShipmentDetail = () => {
   };
 
   if (loading) {
-    return <div className="min-h-screen bg-slate-50 p-8 text-slate-500">Loading...</div>;
+    return (
+      <div className="app-shell">
+        <div className="app-wrap narrow">
+          <p className="loading-state">Loading...</p>
+        </div>
+      </div>
+    );
   }
 
   if (error && !shipment) {
     return (
-      <div className="min-h-screen bg-slate-50 p-8">
-        <div className="max-w-lg mx-auto">
-          <p className="text-red-600 mb-4">{error}</p>
-          <button onClick={() => navigate('/dashboard')} className="text-sm text-slate-600 hover:underline">
+      <div className="app-shell">
+        <div className="app-wrap narrow">
+          <div className="alert-error">{error}</div>
+          <button onClick={() => navigate('/dashboard')} className="btn-secondary">
             ← Back to dashboard
           </button>
         </div>
@@ -114,39 +121,29 @@ const ShipmentDetail = () => {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 p-6 sm:p-8">
-      <div className="max-w-2xl mx-auto">
-        <div className="flex items-center justify-between mb-4">
-          <Link to="/dashboard" className="text-sm text-slate-500 hover:text-slate-900">
+    <div className="app-shell">
+      <div className="app-wrap narrow">
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px' }}>
+          <Link to="/dashboard" className="back-link" style={{ marginBottom: 0 }}>
             ← Back to dashboard
           </Link>
           {isAdmin && (
-            <button
-              onClick={handleDeleteShipment}
-              className="text-xs text-red-500 hover:text-red-700 border border-red-200 rounded-md px-3 py-1.5"
-            >
+            <button onClick={handleDeleteShipment} className="btn-danger">
               Delete shipment
             </button>
           )}
         </div>
 
-        {error && (
-          <div className="mb-4 text-sm text-red-700 bg-red-50 border border-red-200 rounded-md px-3 py-2">
-            {error}
-          </div>
-        )}
+        {error && <div className="alert-error">{error}</div>}
 
         {/* Shipment details card */}
-        <div className="bg-white border border-slate-200 rounded-xl p-6 mb-6">
-          <div className="flex items-center justify-between mb-4">
-            <h1 className="text-xl font-semibold text-slate-900">{shipment.trackingId}</h1>
-            <div className="flex items-center gap-2">
+        <div className="panel detail-card">
+          <div className="detail-head">
+            <h1>{shipment.trackingId}</h1>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <StatusBadge status={shipment.status} />
               {isAdmin && !editingDetails && (
-                <button
-                  onClick={startEditingDetails}
-                  className="text-xs text-slate-500 hover:text-slate-900"
-                >
+                <button onClick={startEditingDetails} className="btn-ghost">
                   Edit
                 </button>
               )}
@@ -154,80 +151,69 @@ const ShipmentDetail = () => {
           </div>
 
           {editingDetails ? (
-            <div className="space-y-3">
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-xs font-medium text-slate-500 mb-1">Origin</label>
+            <div>
+              <div className="form-grid-2">
+                <div className="form-field">
+                  <label>Origin</label>
                   <input
                     type="text"
                     value={detailsForm.origin}
                     onChange={(e) => setDetailsForm({ ...detailsForm, origin: e.target.value })}
-                    className="w-full rounded-md border border-slate-300 px-2 py-1.5 text-sm"
                   />
                 </div>
-                <div>
-                  <label className="block text-xs font-medium text-slate-500 mb-1">Destination</label>
+                <div className="form-field">
+                  <label>Destination</label>
                   <input
                     type="text"
                     value={detailsForm.destination}
                     onChange={(e) => setDetailsForm({ ...detailsForm, destination: e.target.value })}
-                    className="w-full rounded-md border border-slate-300 px-2 py-1.5 text-sm"
                   />
                 </div>
-                <div>
-                  <label className="block text-xs font-medium text-slate-500 mb-1">Carrier</label>
+                <div className="form-field">
+                  <label>Carrier</label>
                   <input
                     type="text"
                     value={detailsForm.carrier}
                     onChange={(e) => setDetailsForm({ ...detailsForm, carrier: e.target.value })}
-                    className="w-full rounded-md border border-slate-300 px-2 py-1.5 text-sm"
                   />
                 </div>
-                <div>
-                  <label className="block text-xs font-medium text-slate-500 mb-1">Est. delivery</label>
+                <div className="form-field">
+                  <label>Est. delivery</label>
                   <input
                     type="date"
                     value={detailsForm.estimatedDelivery}
                     onChange={(e) =>
                       setDetailsForm({ ...detailsForm, estimatedDelivery: e.target.value })
                     }
-                    className="w-full rounded-md border border-slate-300 px-2 py-1.5 text-sm"
                   />
                 </div>
               </div>
-              <div className="flex gap-2">
-                <button
-                  onClick={saveDetails}
-                  disabled={savingDetails}
-                  className="text-sm bg-slate-900 text-white rounded-md px-4 py-1.5 font-medium disabled:opacity-50"
-                >
+              <div style={{ display: 'flex', gap: '10px' }}>
+                <button onClick={saveDetails} disabled={savingDetails} className="btn-primary">
                   {savingDetails ? 'Saving...' : 'Save changes'}
                 </button>
-                <button
-                  onClick={() => setEditingDetails(false)}
-                  className="text-sm text-slate-600 border border-slate-300 rounded-md px-4 py-1.5"
-                >
+                <button onClick={() => setEditingDetails(false)} className="btn-secondary">
                   Cancel
                 </button>
               </div>
             </div>
           ) : (
-            <dl className="grid grid-cols-2 gap-4 text-sm">
+            <dl className="detail-grid">
               <div>
-                <dt className="text-slate-500">Origin</dt>
-                <dd className="text-slate-900 font-medium">{shipment.origin}</dd>
+                <dt>Origin</dt>
+                <dd>{shipment.origin}</dd>
               </div>
               <div>
-                <dt className="text-slate-500">Destination</dt>
-                <dd className="text-slate-900 font-medium">{shipment.destination}</dd>
+                <dt>Destination</dt>
+                <dd>{shipment.destination}</dd>
               </div>
               <div>
-                <dt className="text-slate-500">Carrier</dt>
-                <dd className="text-slate-900 font-medium">{shipment.carrier}</dd>
+                <dt>Carrier</dt>
+                <dd>{shipment.carrier}</dd>
               </div>
               <div>
-                <dt className="text-slate-500">Est. delivery</dt>
-                <dd className="text-slate-900 font-medium">
+                <dt>Est. delivery</dt>
+                <dd>
                   {shipment.estimatedDelivery
                     ? new Date(shipment.estimatedDelivery).toLocaleDateString()
                     : '—'}
@@ -238,8 +224,10 @@ const ShipmentDetail = () => {
         </div>
 
         {/* Timeline card */}
-        <div className="bg-white border border-slate-200 rounded-xl p-6">
-          <h2 className="text-sm font-semibold text-slate-900 mb-4">Status timeline</h2>
+        <div className="panel detail-card" style={{ marginBottom: 0 }}>
+          <h2 style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, fontSize: '15px', marginBottom: '18px' }}>
+            Status timeline
+          </h2>
           <Timeline
             history={shipment.statusHistory}
             isAdmin={isAdmin}

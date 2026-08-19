@@ -14,49 +14,41 @@ const ShipmentTable = ({ shipments, loading }) => {
   const navigate = useNavigate();
 
   if (loading) {
-    return <p className="text-slate-500 text-sm py-8 text-center">Loading shipments...</p>;
+    return <p className="loading-state">Loading shipments...</p>;
   }
 
   if (shipments.length === 0) {
     return (
-      <div className="text-center py-12 border border-dashed border-slate-300 rounded-xl">
-        <p className="text-slate-500">No shipments found.</p>
+      <div className="empty-state">
+        <p>No shipments found.</p>
       </div>
     );
   }
 
   return (
-    <div className="bg-white border border-slate-200 rounded-xl overflow-hidden">
-      <table className="w-full text-sm">
-        <thead>
-          <tr className="border-b border-slate-200 bg-slate-50 text-left text-slate-500">
-            <th className="px-4 py-3 font-medium">Tracking ID</th>
-            <th className="px-4 py-3 font-medium">Origin</th>
-            <th className="px-4 py-3 font-medium">Destination</th>
-            <th className="px-4 py-3 font-medium">Carrier</th>
-            <th className="px-4 py-3 font-medium">Status</th>
-            <th className="px-4 py-3 font-medium">Est. delivery</th>
-          </tr>
-        </thead>
-        <tbody>
-          {shipments.map((s) => (
-            <tr
-              key={s._id}
-              onClick={() => navigate(`/shipments/${s._id}`)}
-              className="border-b border-slate-100 last:border-0 hover:bg-slate-50 cursor-pointer transition"
-            >
-              <td className="px-4 py-3 font-medium text-slate-900">{s.trackingId}</td>
-              <td className="px-4 py-3 text-slate-600">{s.origin}</td>
-              <td className="px-4 py-3 text-slate-600">{s.destination}</td>
-              <td className="px-4 py-3 text-slate-600">{s.carrier}</td>
-              <td className="px-4 py-3">
-                <StatusBadge status={s.status} />
-              </td>
-              <td className="px-4 py-3 text-slate-600">{formatDate(s.estimatedDelivery)}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div className="panel ship-table">
+      <div className="ship-row head">
+        <div>Tracking ID</div>
+        <div>Origin</div>
+        <div>Destination</div>
+        <div>Carrier</div>
+        <div>Status</div>
+        <div>Est. delivery</div>
+      </div>
+      {shipments.map((s) => (
+        <div
+          key={s._id}
+          onClick={() => navigate(`/shipments/${s._id}`)}
+          className="ship-row body"
+        >
+          <div className="cell-primary">{s.trackingId}</div>
+          <div className="cell-muted">{s.origin}</div>
+          <div className="cell-muted">{s.destination}</div>
+          <div className="cell-muted">{s.carrier}</div>
+          <div><StatusBadge status={s.status} /></div>
+          <div className="cell-muted">{formatDate(s.estimatedDelivery)}</div>
+        </div>
+      ))}
     </div>
   );
 };

@@ -5,6 +5,7 @@ import { getShipments, getShipmentSummary } from '../api/shipmentApi';
 import SummaryCards from '../components/SummaryCards';
 import FilterBar from '../components/FilterBar';
 import ShipmentTable from '../components/ShipmentTable';
+import '../styles/app-theme.css';
 
 const Dashboard = () => {
   const { user, logout } = useAuth();
@@ -48,26 +49,20 @@ const Dashboard = () => {
   }, [fetchShipments]);
 
   return (
-    <div className="min-h-screen bg-slate-50 p-6 sm:p-8">
-      <div className="max-w-6xl mx-auto">
-        <div className="flex items-center justify-between mb-6">
+    <div className="app-shell">
+      <div className="app-wrap">
+        <div className="app-header">
           <div>
-            <h1 className="text-2xl font-semibold text-slate-900">ShipTrack Dashboard</h1>
-            <p className="text-sm text-slate-500 mt-0.5">
+            <h1 className="app-title">ShipTrack Dashboard</h1>
+            <p className="app-sub">
               {user?.name} · {user?.role === 'admin' ? 'Admin (all shipments)' : 'Your shipments'}
             </p>
           </div>
-          <div className="flex items-center gap-3">
-            <Link
-              to="/shipments/new"
-              className="bg-slate-900 text-white rounded-md px-4 py-2 text-sm font-medium hover:bg-slate-800 transition"
-            >
+          <div className="app-actions">
+            <Link to="/shipments/new" className="btn-primary">
               + New shipment
             </Link>
-            <button
-              onClick={logout}
-              className="text-sm text-slate-600 hover:text-slate-900 border border-slate-300 rounded-md px-3 py-2"
-            >
+            <button onClick={logout} className="btn-secondary">
               Log out
             </button>
           </div>
@@ -76,11 +71,7 @@ const Dashboard = () => {
         <SummaryCards summary={summary} />
         <FilterBar filters={filters} onChange={setFilters} />
 
-        {error && (
-          <div className="mb-4 text-sm text-red-700 bg-red-50 border border-red-200 rounded-md px-3 py-2">
-            {error}
-          </div>
-        )}
+        {error && <div className="alert-error">{error}</div>}
 
         <ShipmentTable shipments={shipments} loading={loading} />
       </div>

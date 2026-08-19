@@ -2,11 +2,11 @@ import { useState } from 'react';
 import StatusBadge from './StatusBadge';
 
 const STATUS_OPTIONS = ['Pending', 'In Transit', 'Customs', 'Delivered'];
-const STATUS_DOT_COLOR = {
-  Pending: 'bg-slate-400',
-  'In Transit': 'bg-blue-500',
-  Customs: 'bg-amber-500',
-  Delivered: 'bg-green-500',
+const STATUS_NODE_CLASS = {
+  Pending: 'pending',
+  'In Transit': 'transit',
+  Customs: 'customs',
+  Delivered: 'delivered',
 };
 
 const formatDateTime = (dateStr) => {
@@ -49,78 +49,59 @@ const TimelineEntry = ({ entry, isLast, isAdmin, onUpdate, onDelete }) => {
   };
 
   return (
-    <li className="relative pl-8">
-      {/* Vertical connecting line - omitted after the last entry */}
-      {!isLast && (
-        <span className="absolute left-[7px] top-3 bottom-0 w-px bg-slate-200" aria-hidden="true" />
-      )}
-      {/* Dot */}
+    <li className="tl-item">
+      {!isLast && <span className="tl-line" aria-hidden="true" />}
       <span
-        className={`absolute left-0 top-1.5 w-3.5 h-3.5 rounded-full ring-4 ring-white ${
-          STATUS_DOT_COLOR[entry.status] || 'bg-slate-400'
-        }`}
+        className={`tl-node ${STATUS_NODE_CLASS[entry.status] || 'pending'}`}
         aria-hidden="true"
       />
 
-      <div className="pb-6">
+      <div className="tl-body">
         {editing ? (
-          <div className="bg-slate-50 border border-slate-200 rounded-lg p-3 space-y-2">
-            <select
-              value={form.status}
-              onChange={(e) => setForm({ ...form, status: e.target.value })}
-              className="w-full rounded-md border border-slate-300 px-2 py-1.5 text-sm bg-white"
-            >
-              {STATUS_OPTIONS.map((s) => (
-                <option key={s} value={s}>
-                  {s}
-                </option>
-              ))}
-            </select>
+          <div className="tl-edit-panel">
+            <div className="row">
+              <select
+                value={form.status}
+                onChange={(e) => setForm({ ...form, status: e.target.value })}
+              >
+                {STATUS_OPTIONS.map((s) => (
+                  <option key={s} value={s}>
+                    {s}
+                  </option>
+                ))}
+              </select>
+            </div>
             <input
               type="text"
               value={form.note}
               onChange={(e) => setForm({ ...form, note: e.target.value })}
               placeholder="Note (optional)"
-              className="w-full rounded-md border border-slate-300 px-2 py-1.5 text-sm"
             />
-            <div className="flex gap-2">
-              <button
-                onClick={handleSave}
-                disabled={saving}
-                className="text-xs bg-slate-900 text-white rounded-md px-3 py-1.5 font-medium disabled:opacity-50"
-              >
+            <div className="tl-edit-actions">
+              <button onClick={handleSave} disabled={saving} className="btn-primary">
                 {saving ? 'Saving...' : 'Save'}
               </button>
-              <button
-                onClick={() => setEditing(false)}
-                className="text-xs text-slate-600 border border-slate-300 rounded-md px-3 py-1.5"
-              >
+              <button onClick={() => setEditing(false)} className="btn-secondary">
                 Cancel
               </button>
             </div>
           </div>
         ) : (
-          <div className="flex items-start justify-between gap-4">
+          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '16px' }}>
             <div>
-              <div className="flex items-center gap-2">
+              <div className="tl-meta">
                 <StatusBadge status={entry.status} />
-                <span className="text-xs text-slate-400">{formatDateTime(entry.timestamp)}</span>
+                <span className="tl-time">{formatDateTime(entry.timestamp)}</span>
               </div>
-              {entry.note && <p className="text-sm text-slate-600 mt-1">{entry.note}</p>}
+              {entry.note && <p className="tl-note">{entry.note}</p>}
             </div>
 
             {isAdmin && (
-              <div className="flex gap-2 shrink-0">
-                <button
-                  onClick={() => setEditing(true)}
-                  className="text-xs text-slate-500 hover:text-slate-900"
-                >
+              <div className="tl-actions">
+                <button onClick={() => setEditing(true)} className="btn-ghost">
                   Edit
                 </button>
-                <button
-                  onClick={handleDelete}
-                  className="text-xs text-red-500 hover:text-red-700"
-                >
+                <button onClick={handleDelete} className="btn-ghost" style={{ color: 'var(--red)' }}>
                   Delete
                 </button>
               </div>
@@ -139,7 +120,7 @@ const Timeline = ({ history, isAdmin, onUpdate, onDelete }) => {
   const sorted = [...history].sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
 
   return (
-    <ul>
+    <ul className="tl-list">
       {sorted.map((entry, i) => (
         <TimelineEntry
           key={entry._id}
