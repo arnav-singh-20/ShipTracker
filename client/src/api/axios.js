@@ -5,7 +5,7 @@ import axios from 'axios';
 // per-call: the base URL, and attaching the JWT.
 const api = axios.create({
   baseURL:
-    import.meta.env.VITE_API_URL || "https://shiptracker-1-lqi3.onrender.com",});
+    import.meta.env.VITE_API_URL || "https://shiptracker-1-lqi3.onrender.com/api",});
 
 // Request interceptor: reads the token from localStorage and attaches it
 // as a Bearer header on every outgoing request. This means individual
